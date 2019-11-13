@@ -1,0 +1,43 @@
+language: node_js
+node_js:
+  - node
+
+dist: bionic
+sudo: required
+
+notifications:
+  email:
+    recipients:
+      - bunnyppl@gmail.com
+    on_success: always
+    on_failure: always
+  slack: 
+    rooms:
+      - csf-2019:JOLzMXebwOog6dJnFQ7yVERe#ken-build
+    on_success: change
+    on_failure: always 
+    template:
+      - "Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) of %{repository_slug}@%{branch} in PR <%{pull_request_url}|#%{pull_request_number}> by %{author} %{result} in %{duration}"  
+branches:
+  only:
+   - master
+before_script:
+  - npm install -g @angular/cli
+  - npm install -g now
+script:
+  - ng build --prod --base-href https://kenken64.github.io/weather-app/
+  - ng build --prod --output-path ./dist/zeit-cloud --base-href https://weather-app.bunnyppl.now.sh/
+  
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_TOKEN
+  local_dir: dist/weather-app
+  on:
+    branch: master
+deploy:
+  provider: script
+  script: npm run deploy 
+  local_dir: dist/zeit-cloud
+  on:
+    branch: master
