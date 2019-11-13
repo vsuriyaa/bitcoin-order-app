@@ -20,7 +20,7 @@ notifications:
       - "Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) of %{repository_slug}@%{branch} in PR <%{pull_request_url}|#%{pull_request_number}> by %{author} %{result} in %{duration}"  
 branches:
   only:
-   - master
+   - development
 before_script:
   - npm install -g @angular/cli
   - npm install -g now
@@ -34,10 +34,10 @@ deploy:
   github_token: $GITHUB_TOKEN
   local_dir: dist/weather-app
   on:
-    branch: master
+    branch: development
 deploy:
   provider: script
   script: npm run deploy 
   local_dir: dist/zeit-cloud
   on:
-    branch: master
+    branch: development
